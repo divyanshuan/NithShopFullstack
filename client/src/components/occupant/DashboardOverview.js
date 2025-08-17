@@ -148,50 +148,38 @@ const DashboardOverview = () => {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-
-    console.log("🔐 Attempting to change password...");
-    console.log("Password data:", passwordData);
-
+    
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("New passwords don't match");
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error("New password must be at least 6 characters");
       return;
     }
 
-    setChangingPassword(true);
     try {
+      setChangingPassword(true);
+      
       const changePasswordData = {
+        currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
-        confirmPassword: passwordData.confirmPassword,
       };
 
-      console.log("📤 Sending to API:", changePasswordData);
       const result = await changePassword(changePasswordData);
-      console.log("📥 API response:", result);
 
       if (result.success) {
-        toast.success("Password changed successfully!");
+        toast.success("Password changed successfully");
+        setPasswordData({ newPassword: "", confirmPassword: "" });
         setShowPasswordModal(false);
-
-        // The backend now returns new token and user data
-        // We need to update the frontend state with this new data
-        console.log("🔄 Password change successful, updating user state...");
-
-        // The modal should automatically close due to the useEffect that watches user.isFirstLogin
-        // But let's also clear the form data
-        setPasswordData({
-          newPassword: "",
-          confirmPassword: "",
-        });
+        
+        // Refresh user data to get updated token
+        await refreshUser();
       } else {
-        toast.error(result.error);
+        toast.error(result.error || "Failed to change password");
       }
     } catch (error) {
-      console.error("❌ Password change failed:", error);
       toast.error("Failed to change password");
     } finally {
       setChangingPassword(false);

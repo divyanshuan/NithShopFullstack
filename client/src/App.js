@@ -37,10 +37,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 const AppRoutes = () => {
   const { user, loading } = useAuth();
 
-  console.log("🔄 AppRoutes - Loading:", loading, "User:", user);
-
   if (loading) {
-    console.log("⏳ Showing loading spinner...");
     return <LoadingSpinner />;
   }
 

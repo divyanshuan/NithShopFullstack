@@ -4,9 +4,6 @@ import { toast } from "react-hot-toast";
 import { adminAPI } from "../../services/api";
 import { Edit, Plus, Send, Upload } from "lucide-react";
 import LoadingSpinner from "../common/LoadingSpinner";
-import PageHeader from "../common/PageHeader";
-import FileUploadModal from "../common/FileUploadModal";
-import FileList from "../common/FileList";
 import CommunicationModal from "./CommunicationModal";
 
 const PropertyDetails = () => {
@@ -32,24 +29,16 @@ const PropertyDetails = () => {
   const fetchPropertyDetails = async () => {
     try {
       setLoading(true);
-      console.log("🔍 Fetching property details for:", { type, propertyId });
       const response = await adminAPI.getPropertyDetails(type, propertyId);
-      console.log("✅ Property details response:", response.data);
 
       if (response.data && response.data.property) {
-        console.log("📋 Setting property data:", response.data.property);
         setProperty(response.data.property);
       } else {
-        console.error("❌ Invalid response structure:", response.data);
-        toast.error("Invalid response from server");
+        console.error("Invalid response structure:", response.data);
+        toast.error("Failed to load property details");
       }
     } catch (error) {
-      console.error("❌ Error fetching property details:", error);
-      console.error(
-        "❌ Error details:",
-        error.response?.data,
-        error.response?.status
-      );
+      console.error("Error fetching property details:", error);
       toast.error("Failed to load property details");
     } finally {
       setLoading(false);
@@ -58,7 +47,6 @@ const PropertyDetails = () => {
 
   const fetchFiles = async () => {
     try {
-      console.log("🔍 Fetching files for property:", propertyId);
       const response = await fetch(`/api/files/property/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +59,6 @@ const PropertyDetails = () => {
       }
 
       const data = await response.json();
-      console.log("✅ Files response:", data);
       setFiles(data.files || []);
     } catch (error) {
       console.error("❌ Error fetching files:", error);
@@ -81,7 +68,6 @@ const PropertyDetails = () => {
 
   const fetchCommunications = async () => {
     try {
-      console.log("🔍 Fetching communications for property:", propertyId);
       const response = await fetch(
         `/api/communications/property/${propertyId}`,
         {
@@ -97,7 +83,6 @@ const PropertyDetails = () => {
       }
 
       const data = await response.json();
-      console.log("✅ Communications response:", data);
       setCommunications(data.communications || []);
     } catch (error) {
       console.error("❌ Error fetching communications:", error);
@@ -180,7 +165,6 @@ const PropertyDetails = () => {
 
   const handleDeleteFile = async (fileId) => {
     try {
-      console.log("🗑️ Deleting file:", fileId);
       const response = await fetch(`/api/files/${fileId}`, {
         method: "DELETE",
         headers: {
@@ -373,14 +357,48 @@ const PropertyDetails = () => {
           </h2>
         </div>
 
-        <FileList
-          files={files.filter((file) => file.uploadedBy === "admin")}
-          onDelete={handleDeleteFile}
-          showDelete={true}
-          showUploader={false}
-          title=""
-          emptyMessage="No admin files uploaded for this property yet."
-        />
+        <div>
+          {files.filter((file) => file.uploadedBy === "admin").length === 0 ? (
+            <div className="text-center py-6 text-gray-500">
+              <p className="text-sm">No admin files uploaded for this property yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {files
+                .filter((file) => file.uploadedBy === "admin")
+                .map((file) => (
+                  <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-3">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-sm font-medium text-gray-900 truncate">
+                            {file.fileTitle}
+                          </h3>
+                          {file.description && (
+                            <p className="text-xs text-gray-600 truncate mt-1">
+                              {file.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                        <span className="truncate">{file.fileName}</span>
+                        <span>{(file.fileSize / 1024).toFixed(1)} KB</span>
+                        <span>{new Date(file.uploadedAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteFile(file.id)}
+                      className="ml-3 p-1.5 text-red-600 hover:bg-red-100 rounded transition-colors"
+                      title="Delete file"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Tabbed Section for Occupant Files and Communications */}
@@ -417,36 +435,76 @@ const PropertyDetails = () => {
               <h4 className="text-md font-medium text-gray-900 mb-3">
                 Files Uploaded by Occupant
               </h4>
-              <FileList
-                files={files.filter((file) => file.uploadedBy === "occupant")}
-                onDelete={() => {}} // Occupants can't delete admin files
-                showDelete={false}
-                showUploader={false}
-                title=""
-                emptyMessage="No occupant files uploaded for this property yet."
-              />
+              {files.filter((file) => file.uploadedBy === "occupant").length === 0 ? (
+                <div className="text-center py-6 text-gray-500">
+                  <p className="text-sm">No occupant files uploaded for this property yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {files
+                    .filter((file) => file.uploadedBy === "occupant")
+                    .map((file) => (
+                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-3">
+                            <div className="min-w-0 flex-1">
+                              <h3 className="text-sm font-medium text-gray-900 truncate">
+                                {file.fileTitle}
+                              </h3>
+                              {file.description && (
+                                <p className="text-xs text-gray-600 truncate mt-1">
+                                  {file.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                            <span className="truncate">{file.fileName}</span>
+                            <span>{(file.fileSize / 1024).toFixed(1)} KB</span>
+                            <span>{new Date(file.uploadedAt).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
           ) : (
             <div>
               <h4 className="text-md font-medium text-gray-900 mb-3">
                 Communications Sent to This Property
               </h4>
-              <FileList
-                files={communications.map((comm) => ({
-                  id: comm.id,
-                  fileTitle: comm.fileTitle,
-                  description: comm.message,
-                  fileName: comm.fileName,
-                  fileSize: comm.fileSize,
-                  uploadedBy: "admin",
-                  uploadedAt: comm.sentAt,
-                }))}
-                onDelete={() => {}}
-                showDelete={false}
-                showUploader={false}
-                title=""
-                emptyMessage="No communications sent to this property yet."
-              />
+              {communications.length === 0 ? (
+                <div className="text-center py-6 text-gray-500">
+                  <p className="text-sm">No communications sent to this property yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {communications.map((comm) => (
+                    <div key={comm.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-3">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-sm font-medium text-gray-900 truncate">
+                              {comm.fileTitle}
+                            </h3>
+                            {comm.message && (
+                              <p className="text-xs text-gray-600 truncate mt-1">
+                                {comm.message}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                          <span className="truncate">{comm.fileName}</span>
+                          <span>{(comm.fileSize / 1024).toFixed(1)} KB</span>
+                          <span>{new Date(comm.sentAt).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -527,14 +585,75 @@ const PropertyDetails = () => {
       )}
 
       {/* File Upload Modal */}
-      <FileUploadModal
-        isOpen={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
-        onSubmit={handleFileUpload}
-        title="Upload File"
-        submitText="Upload File"
-        loading={uploading}
-      />
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Upload File
+            </h2>
+            
+            <form onSubmit={handleFileUpload} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  File Title
+                </label>
+                <input
+                  type="text"
+                  name="fileTitle"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter file title"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter file description"
+                  rows="3"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  PDF File
+                </label>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".pdf"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Only PDF files are allowed (max 10MB)
+                </p>
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowUploadModal(false)}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                >
+                  {uploading ? "Uploading..." : "Upload File"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Communication Modal */}
       <CommunicationModal

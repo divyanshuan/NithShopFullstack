@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Plus, Upload, FileText, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../contexts/AuthContext";
-import FileUploadModal from "../common/FileUploadModal";
-import FileList from "../common/FileList";
 
 const FileUploadTab = () => {
   const { user } = useAuth();
@@ -11,6 +9,11 @@ const FileUploadTab = () => {
   const [loading, setLoading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadData, setUploadData] = useState({
+    fileTitle: "",
+    description: "",
+    file: null,
+  });
 
   useEffect(() => {
     fetchFiles();
@@ -41,53 +44,40 @@ const FileUploadTab = () => {
     }
   };
 
-  const handleUpload = async (uploadData) => {
+  const handleUpload = async (e) => {
+    e.preventDefault();
     setUploading(true);
     try {
-      console.log("🔍 User object:", user);
-      console.log("🔍 Upload data:", uploadData);
-
       const formData = new FormData();
-      formData.append("propertyId", user.propertyId); // Changed from property_id to propertyId
+      formData.append("propertyId", user.propertyId);
       formData.append("fileTitle", uploadData.fileTitle);
       formData.append("description", uploadData.description);
       formData.append("file", uploadData.file);
       formData.append("uploadedBy", "occupant");
       formData.append("uploadedById", user.id);
 
-      console.log("🔍 FormData contents:");
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       const response = await fetch("/api/files/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-          // Don't set Content-Type for FormData - let browser handle it
         },
         body: formData,
       });
 
-      console.log("🔍 Response status:", response.status);
-      console.log("🔍 Response headers:", response.headers);
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.log("🔍 Error response:", errorData);
-        throw new Error(
-          errorData.message || `Upload failed: ${response.status}`
-        );
+        throw new Error(errorData.message || `Upload failed: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log("🔍 Success response:", result);
       toast.success("File uploaded successfully");
 
       // Refresh file list
       fetchFiles();
+      setShowUploadModal(false); // Close modal on success
+      setUploadData({ fileTitle: "", description: "", file: null }); // Reset form
     } catch (error) {
-      console.error("❌ Upload error:", error);
+      console.error("Upload error:", error);
       toast.error(error.message || "Failed to upload file");
       throw error;
     } finally {
@@ -207,14 +197,83 @@ const FileUploadTab = () => {
       </div>
 
       {/* Upload Modal */}
-      <FileUploadModal
-        isOpen={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
-        onSubmit={handleUpload}
-        title="Upload New File"
-        submitText="Upload File"
-        loading={uploading}
-      />
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Upload New File
+            </h2>
+            
+            <form onSubmit={handleUpload} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  File Title
+                </label>
+                <input
+                  type="text"
+                  value={uploadData.fileTitle}
+                  onChange={(e) =>
+                    setUploadData({ ...uploadData, fileTitle: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter file title"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={uploadData.description}
+                  onChange={(e) =>
+                    setUploadData({ ...uploadData, description: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter file description"
+                  rows="3"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  PDF File
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) =>
+                    setUploadData({ ...uploadData, file: e.target.files[0] })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Only PDF files are allowed (max 10MB)
+                </p>
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowUploadModal(false)}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                >
+                  {uploading ? "Uploading..." : "Upload File"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

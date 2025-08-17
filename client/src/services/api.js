@@ -57,45 +57,12 @@ export const adminAPI = {
     api.post(`/admin/properties/${type}/${propertyId}/reset-password`),
   getPropertyDetails: (type, propertyId) =>
     api.get(`/admin/properties/${type}/${propertyId}`),
-
-  // Admin management
-  createAdmin: (data) => api.post("/admin/admins", data),
-  getAllAdmins: () => api.get("/admin/admins"),
-  changeAdminPassword: (adminId, data) =>
-    api.put(`/admin/admins/${adminId}/password`, data),
-  updateAdminStatus: (adminId, data) =>
-    api.patch(`/admin/admins/${adminId}/status`, data),
 };
 
 // Occupant API
 export const occupantAPI = {
   getDashboard: () => api.get("/occupant/dashboard"),
   getPropertyInfo: () => api.get("/occupant/property"),
-};
-
-// File API
-export const fileAPI = {
-  uploadFile: (formData) => api.post("/files/upload", formData),
-  getPropertyFiles: (propertyId) => api.get(`/files/property/${propertyId}`),
-  getOccupantFiles: (occupantId) => api.get(`/files/occupant/${occupantId}`),
-  deleteFile: (fileId, data) => api.delete(`/files/${fileId}`, { data }),
-  downloadFile: (fileId) => api.get(`/files/download/${fileId}`),
-};
-
-// Communication API
-export const communicationAPI = {
-  sendIndividualCommunication: (formData) =>
-    api.post("/communications/individual", formData),
-  sendBulkCommunication: (formData) =>
-    api.post("/communications/bulk", formData),
-  getPropertyCommunications: (propertyId) =>
-    api.get(`/communications/property/${propertyId}`),
-  getOccupantCommunications: (occupantId) =>
-    api.get(`/communications/occupant/${occupantId}`),
-  markAsRead: (communicationId) =>
-    api.patch(`/communications/${communicationId}/read`),
-  deleteCommunication: (communicationId) =>
-    api.delete(`/communications/${communicationId}`),
 };
 
 export default api;

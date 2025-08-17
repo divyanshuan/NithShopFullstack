@@ -36,7 +36,6 @@ const PropertiesList = () => {
   // Update form data when page type changes
   useEffect(() => {
     if (type) {
-      console.log("🔄 Page type changed to:", type);
       setAddFormData((prev) => ({
         ...prev,
         propertyType: type,
@@ -47,12 +46,11 @@ const PropertiesList = () => {
   // Check if modal should be opened automatically from dashboard navigation
   useEffect(() => {
     if (location.state?.openAddModal) {
-      console.log("Opening add modal automatically from dashboard navigation");
       setShowAddModal(true);
       // Clear the state to prevent reopening on refresh
       navigate(location.pathname, { replace: true });
     }
-  }, [location.state, navigate, location.pathname]);
+  }, [location.state, navigate]);
 
   // Safety check for type parameter - moved after all hooks
   if (!type) {
@@ -66,7 +64,6 @@ const PropertiesList = () => {
   const fetchProperties = async () => {
     try {
       setLoading(true);
-      console.log("🔍 Fetching properties for type:", type);
 
       if (!type) {
         console.error("❌ Type parameter is undefined");
@@ -78,8 +75,6 @@ const PropertiesList = () => {
         currentPage,
         10
       );
-
-      console.log("✅ Properties response:", response.data);
 
       if (response.data && response.data.properties) {
         setProperties(response.data.properties);
@@ -148,10 +143,6 @@ const PropertiesList = () => {
       ...addFormData,
       propertyType: type, // Force use current page type
     };
-
-    console.log("🚀 Creating property with data:", propertyData);
-    console.log("📄 Current page type:", type);
-    console.log("🏢 Property type being sent:", propertyData.propertyType);
 
     try {
       const response = await adminAPI.addProperty(propertyData);
