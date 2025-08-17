@@ -174,12 +174,15 @@ const AdminLogin = () => {
 
           {/* Links */}
           <div className="text-center space-y-2">
-            <Link
-              to="/login"
-              className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
-            >
-              ← Back to Login Selection
-            </Link>
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Are you an occupant?{" "}
+              <Link
+                to="/"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                Login as Occupant
+              </Link>
+            </p>
           </div>
         </form>
 

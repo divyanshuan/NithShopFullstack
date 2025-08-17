@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import LoginSelection from "./components/auth/LoginSelection";
 import AdminLogin from "./components/auth/AdminLogin";
 import OccupantLogin from "./components/auth/OccupantLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
@@ -23,7 +22,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
@@ -45,10 +44,8 @@ const AppRoutes = () => {
   if (!user) {
     return (
       <Routes>
-        <Route path="/" element={<LoginSelection />} />
-        <Route path="/login" element={<LoginSelection />} />
+        <Route path="/" element={<OccupantLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/occupant/login" element={<OccupantLogin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
@@ -59,39 +56,6 @@ const AppRoutes = () => {
     <Routes>
       <Route
         path="/"
-        element={
-          user.role === "admin" || user.role === "Super Admin" ? (
-            <Navigate to="/admin" replace />
-          ) : (
-            <Navigate to="/occupant" replace />
-          )
-        }
-      />
-
-      <Route
-        path="/login"
-        element={
-          user.role === "admin" || user.role === "Super Admin" ? (
-            <Navigate to="/admin" replace />
-          ) : (
-            <Navigate to="/occupant" replace />
-          )
-        }
-      />
-
-      <Route
-        path="/admin/login"
-        element={
-          user.role === "admin" || user.role === "Super Admin" ? (
-            <Navigate to="/admin" replace />
-          ) : (
-            <Navigate to="/occupant" replace />
-          )
-        }
-      />
-
-      <Route
-        path="/occupant/login"
         element={
           user.role === "admin" || user.role === "Super Admin" ? (
             <Navigate to="/admin" replace />

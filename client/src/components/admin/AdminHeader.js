@@ -9,8 +9,8 @@ const AdminHeader = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    localStorage.removeItem("token");
+    navigate("/admin/login");
   };
 
   return (
