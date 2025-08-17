@@ -1,95 +1,51 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { User, Settings, LogOut, ChevronDown, Building2 } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 
 const OccupantHeader = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
 
-  const handleChangePassword = () => {
-    navigate("/change-password");
-    setShowUserMenu(false);
-  };
-
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo and Title */}
+    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+      <div className="px-4 py-3 lg:px-6 lg:py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo/Brand */}
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <Building2 className="h-5 w-5 text-white" />
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">N</span>
             </div>
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                NithShop - {user?.propertyCode}
-              </h1>
-              <p className="text-sm text-gray-500">{user?.propertyType}</p>
+            <div className="hidden sm:block">
+              <h1 className="text-lg font-semibold text-gray-900">NithShop</h1>
+              <p className="text-xs text-gray-600">Management System</p>
             </div>
           </div>
 
-          {/* Right side - User Menu */}
-          <div className="flex items-center space-x-4">
-            {/* User Menu */}
-            <div className="relative">
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center space-x-2 p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <div className="h-8 w-8 bg-primary-100 rounded-full flex items-center justify-center">
-                  <User className="h-4 w-4 text-primary-600" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900">
-                    {user?.name}
-                  </p>
-                  <p className="text-xs text-gray-500">Occupant</p>
-                </div>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
-              </button>
-
-              {/* User Dropdown Menu */}
-              {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                  <div className="py-1">
-                    {/* <button
-                      onClick={handleChangePassword}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
-                    >
-                      <Settings className="h-4 w-4" />
-                      <span>Change Password</span>
-                    </button> */}
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+          {/* User Info and Actions */}
+          <div className="flex items-center space-x-3">
+            {/* User Info */}
+            <div className="hidden sm:flex items-center space-x-2 text-sm">
+              <User className="w-4 h-4 text-gray-500" />
+              <span className="text-gray-700 font-medium">{user?.name || "User"}</span>
             </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
           </div>
         </div>
       </div>
-
-      {/* Click outside to close dropdowns */}
-      {showUserMenu && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => {
-            setShowUserMenu(false);
-          }}
-        />
-      )}
     </header>
   );
 };

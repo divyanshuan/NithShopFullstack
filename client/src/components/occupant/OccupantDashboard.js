@@ -10,9 +10,9 @@ const OccupantDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <OccupantHeader />
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         <OccupantSidebar />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-3 lg:p-6">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/files" element={<FileUploadTab />} />
