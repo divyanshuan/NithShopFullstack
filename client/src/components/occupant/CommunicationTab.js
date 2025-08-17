@@ -137,18 +137,24 @@ const CommunicationTab = () => {
   }
 
   return (
-    <div className="space-y-4 lg:space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+      <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
         <div>
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-900">Communications</h1>
-          <p className="text-sm lg:text-base text-gray-600 mt-1">View messages and files shared by administrators</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+            Communications
+          </h1>
+          <p className="text-sm md:text-base text-gray-600 mt-1">
+            View messages and files shared by administrators
+          </p>
         </div>
       </div>
 
       {/* Communications List */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-        <h2 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4">Received Messages</h2>
+      <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+          Received Messages
+        </h2>
         {loading ? (
           <div className="flex justify-center items-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -157,7 +163,9 @@ const CommunicationTab = () => {
           <div className="text-center py-6 text-gray-500">
             <MessageSquare className="w-10 h-10 mx-auto mb-2 text-gray-300" />
             <p className="text-sm font-medium">No Communications</p>
-            <p className="text-xs">You haven't received any messages from administrators yet.</p>
+            <p className="text-xs">
+              You haven't received any messages from administrators yet.
+            </p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -181,21 +189,25 @@ const CommunicationTab = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   {communication.message && (
                     <p className="text-xs text-gray-600 truncate mb-1">
                       {communication.message}
                     </p>
                   )}
-                  
+
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 text-xs text-gray-500 space-y-1 sm:space-y-0">
-                    <span>{new Date(communication.sentAt).toLocaleDateString()}</span>
+                    <span>
+                      {new Date(communication.sentAt).toLocaleDateString()}
+                    </span>
                     {communication.fileName && (
-                      <span className="truncate">File: {communication.fileName}</span>
+                      <span className="truncate">
+                        File: {communication.fileName}
+                      </span>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-1 ml-3">
                   {communication.status === "unread" && (
                     <button
@@ -206,10 +218,12 @@ const CommunicationTab = () => {
                       <Eye className="w-4 h-4" />
                     </button>
                   )}
-                  
+
                   {communication.fileName && (
                     <button
-                      onClick={() => handleDownload(communication.id, communication.fileName)}
+                      onClick={() =>
+                        handleDownload(communication.id, communication.fileName)
+                      }
                       className="p-1.5 text-green-600 hover:bg-green-100 rounded transition-colors"
                       title="Download file"
                     >

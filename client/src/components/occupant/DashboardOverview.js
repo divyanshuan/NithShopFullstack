@@ -148,7 +148,7 @@ const DashboardOverview = () => {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error("New passwords don't match");
       return;
@@ -161,7 +161,7 @@ const DashboardOverview = () => {
 
     try {
       setChangingPassword(true);
-      
+
       const changePasswordData = {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
@@ -173,7 +173,7 @@ const DashboardOverview = () => {
         toast.success("Password changed successfully");
         setPasswordData({ newPassword: "", confirmPassword: "" });
         setShowPasswordModal(false);
-        
+
         // Refresh user data to get updated token
         await refreshUser();
       } else {
@@ -291,20 +291,32 @@ const DashboardOverview = () => {
   };
 
   return (
-    <div className="space-y-4 lg:space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header with Welcome and Change Password/Edit Profile buttons */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+      <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div>
-            <h1 className="text-xl lg:text-2xl font-bold text-gray-900">Welcome, {user?.name || "Occupant"}!</h1>
-            <p className="text-sm lg:text-base text-gray-600 mt-1">Manage your property files and view communications</p>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+              Welcome, {user?.name || "Occupant"}!
+            </h1>
+            <p className="text-sm md:text-base text-gray-600 mt-1">
+              Manage your property files and view communications
+            </p>
           </div>
           <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
-            <button onClick={() => setShowEditProfile(true)} className="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm">
-              <Edit className="w-4 h-4 mr-2" />Edit Profile
+            <button
+              onClick={() => setShowEditProfile(true)}
+              className="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Profile
             </button>
-            <button onClick={() => setShowPasswordModal(true)} className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
-              <Lock className="w-4 h-4 mr-2" />Change Password
+            <button
+              onClick={() => setShowPasswordModal(true)}
+              className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+            >
+              <Lock className="w-4 h-4 mr-2" />
+              Change Password
             </button>
           </div>
         </div>
@@ -317,15 +329,19 @@ const DashboardOverview = () => {
       ) : dashboardData ? (
         <>
           {/* Property Information */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-            <h2 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4">Property Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+              Property Information
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {/* Property Code */}
               <div className="flex items-center space-x-3">
-                <Building2 className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
+                <Building2 className="w-6 h-6 md:w-8 md:h-8 text-blue-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Property Code</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Property Code
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {dashboardData.property?.property_code || "Not set"}
                   </p>
                 </div>
@@ -333,10 +349,12 @@ const DashboardOverview = () => {
 
               {/* Property Type */}
               <div className="flex items-center space-x-3">
-                <MapPin className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
+                <MapPin className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Property Type</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Property Type
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {dashboardData.property?.property_type || "Not set"}
                   </p>
                 </div>
@@ -345,15 +363,19 @@ const DashboardOverview = () => {
           </div>
 
           {/* Profile Information */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-            <h2 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4">Your Profile</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+              Your Profile
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {/* Name */}
               <div className="flex items-center space-x-3">
-                <User className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
+                <User className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Name</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Name
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {user?.name || "Not set"}
                   </p>
                 </div>
@@ -361,12 +383,14 @@ const DashboardOverview = () => {
 
               {/* Email */}
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs lg:text-sm">@</span>
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs md:text-sm">@</span>
                 </div>
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Email</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Email
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {user?.email || "Not set"}
                   </p>
                 </div>
@@ -374,12 +398,14 @@ const DashboardOverview = () => {
 
               {/* Contact */}
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 lg:w-8 lg:h-8 bg-green-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs lg:text-sm">📞</span>
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-green-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs md:text-sm">📞</span>
                 </div>
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Contact</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Contact
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {user?.contact || "Not set"}
                   </p>
                 </div>
@@ -387,12 +413,14 @@ const DashboardOverview = () => {
 
               {/* Status */}
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 lg:w-8 lg:h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs lg:text-sm">✓</span>
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs md:text-sm">✓</span>
                 </div>
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Status</p>
-                  <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Status
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
                     {user?.status || "Not set"}
                   </p>
                 </div>
@@ -401,14 +429,16 @@ const DashboardOverview = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
             {/* Your Files Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
               <div className="flex items-center space-x-3">
-                <Upload className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
+                <Upload className="w-6 h-6 md:w-8 md:h-8 text-blue-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Your Files</p>
-                  <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Your Files
+                  </p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">
                     {occupantFiles.length}
                   </p>
                 </div>
@@ -416,12 +446,14 @@ const DashboardOverview = () => {
             </div>
 
             {/* Communications Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
               <div className="flex items-center space-x-3">
-                <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
+                <MessageSquare className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Communications</p>
-                  <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Communications
+                  </p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">
                     {communications.length}
                   </p>
                 </div>
@@ -429,12 +461,14 @@ const DashboardOverview = () => {
             </div>
 
             {/* Admin Files Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
               <div className="flex items-center space-x-3">
-                <FileText className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
+                <FileText className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
                 <div>
-                  <p className="text-sm lg:text-base font-medium text-gray-600">Admin Files</p>
-                  <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  <p className="text-sm md:text-base font-medium text-gray-600">
+                    Admin Files
+                  </p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">
                     {adminFiles.length}
                   </p>
                 </div>
@@ -443,8 +477,8 @@ const DashboardOverview = () => {
           </div>
 
           {/* Admin Files Section */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-            <h2 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
               Files Shared by Admin
             </h2>
             {loadingFiles ? (
@@ -455,12 +489,17 @@ const DashboardOverview = () => {
               <div className="text-center py-6 text-gray-500">
                 <FileText className="w-10 h-10 mx-auto mb-2 text-gray-300" />
                 <p className="text-sm font-medium">No Admin Files</p>
-                <p className="text-xs">No files have been shared by administrators yet.</p>
+                <p className="text-xs">
+                  No files have been shared by administrators yet.
+                </p>
               </div>
             ) : (
               <div className="space-y-2">
                 {adminFiles.map((file) => (
-                  <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <div
+                    key={file.id}
+                    className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-3">
                         <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
@@ -478,7 +517,9 @@ const DashboardOverview = () => {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-xs text-gray-500 mt-1 space-y-1 sm:space-y-0">
                         <span className="truncate">{file.fileName}</span>
                         <span>{(file.fileSize / 1024).toFixed(1)} KB</span>
-                        <span>{new Date(file.uploadedAt).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(file.uploadedAt).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
                     <button
@@ -495,8 +536,8 @@ const DashboardOverview = () => {
           </div>
 
           {/* Communications Section */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
-            <h2 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
               Communications from Admin
             </h2>
             {loadingFiles ? (
@@ -507,7 +548,9 @@ const DashboardOverview = () => {
               <div className="text-center py-6 text-gray-500">
                 <MessageSquare className="w-10 h-10 mx-auto mb-2 text-gray-300" />
                 <p className="text-sm font-medium">No Communications</p>
-                <p className="text-xs">You haven't received any messages from administrators yet.</p>
+                <p className="text-xs">
+                  You haven't received any messages from administrators yet.
+                </p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -531,21 +574,25 @@ const DashboardOverview = () => {
                           </span>
                         )}
                       </div>
-                      
+
                       {communication.message && (
                         <p className="text-xs text-gray-600 truncate mb-1">
                           {communication.message}
                         </p>
                       )}
-                      
+
                       <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 text-xs text-gray-500 space-y-1 sm:space-y-0">
-                        <span>{new Date(communication.sentAt).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(communication.sentAt).toLocaleDateString()}
+                        </span>
                         {communication.fileName && (
-                          <span className="truncate">File: {communication.fileName}</span>
+                          <span className="truncate">
+                            File: {communication.fileName}
+                          </span>
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-1 ml-3">
                       {communication.status === "unread" && (
                         <button
@@ -556,10 +603,15 @@ const DashboardOverview = () => {
                           <Eye className="w-4 h-4" />
                         </button>
                       )}
-                      
+
                       {communication.fileName && (
                         <button
-                          onClick={() => handleCommunicationDownload(communication.id, communication.fileName)}
+                          onClick={() =>
+                            handleCommunicationDownload(
+                              communication.id,
+                              communication.fileName
+                            )
+                          }
                           className="p-1.5 text-green-600 hover:bg-green-100 rounded transition-colors"
                           title="Download file"
                         >
@@ -582,9 +634,11 @@ const DashboardOverview = () => {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-4 lg:p-6 w-full max-w-md mx-auto">
+          <div className="bg-white rounded-lg p-4 md:p-6 w-full max-w-md mx-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Change Password</h3>
+              <h3 className="text-lg font-medium text-gray-900">
+                Change Password
+              </h3>
               <button
                 onClick={() => setShowPasswordModal(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -602,7 +656,10 @@ const DashboardOverview = () => {
                     type={showPasswords.current ? "text" : "password"}
                     value={passwordData.currentPassword}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        currentPassword: e.target.value,
+                      })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -611,7 +668,10 @@ const DashboardOverview = () => {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                     onClick={() =>
-                      setShowPasswords({ ...showPasswords, current: !showPasswords.current })
+                      setShowPasswords({
+                        ...showPasswords,
+                        current: !showPasswords.current,
+                      })
                     }
                   >
                     {showPasswords.current ? (
@@ -632,7 +692,10 @@ const DashboardOverview = () => {
                     type={showPasswords.new ? "text" : "password"}
                     value={passwordData.newPassword}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, newPassword: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        newPassword: e.target.value,
+                      })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -641,7 +704,10 @@ const DashboardOverview = () => {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                     onClick={() =>
-                      setShowPasswords({ ...showPasswords, new: !showPasswords.new })
+                      setShowPasswords({
+                        ...showPasswords,
+                        new: !showPasswords.new,
+                      })
                     }
                   >
                     {showPasswords.new ? (
@@ -662,7 +728,10 @@ const DashboardOverview = () => {
                     type={showPasswords.confirm ? "text" : "password"}
                     value={passwordData.confirmPassword}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        confirmPassword: e.target.value,
+                      })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -671,7 +740,10 @@ const DashboardOverview = () => {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                     onClick={() =>
-                      setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })
+                      setShowPasswords({
+                        ...showPasswords,
+                        confirm: !showPasswords.new,
+                      })
                     }
                   >
                     {showPasswords.confirm ? (
@@ -707,9 +779,11 @@ const DashboardOverview = () => {
       {/* Edit Profile Modal */}
       {showEditProfile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-4 lg:p-6 w-full max-w-md mx-auto">
+          <div className="bg-white rounded-lg p-4 md:p-6 w-full max-w-md mx-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Edit Profile</h3>
+              <h3 className="text-lg font-medium text-gray-900">
+                Edit Profile
+              </h3>
               <button
                 onClick={() => setShowEditProfile(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -741,7 +815,10 @@ const DashboardOverview = () => {
                   type="tel"
                   value={editFormData.contact}
                   onChange={(e) =>
-                    setEditFormData({ ...editFormData, contact: e.target.value })
+                    setEditFormData({
+                      ...editFormData,
+                      contact: e.target.value,
+                    })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

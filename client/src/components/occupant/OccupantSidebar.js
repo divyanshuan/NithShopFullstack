@@ -33,8 +33,8 @@ const OccupantSidebar = () => {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-20 left-4 z-50">
+      {/* Mobile menu button - only visible on mobile */}
+      <div className="md:hidden fixed top-20 left-4 z-50">
         <button
           onClick={toggleSidebar}
           className="p-2 bg-white rounded-lg shadow-lg border border-gray-200"
@@ -43,25 +43,30 @@ const OccupantSidebar = () => {
         </button>
       </div>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay - only visible on mobile */}
       {isOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0
-        fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-white shadow-lg lg:shadow-sm border-r border-gray-200
+      <div
+        className={`
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0
+        fixed md:relative inset-y-0 left-0 z-50 md:z-auto
+        w-64 bg-white shadow-lg md:shadow-sm border-r border-gray-200
         transform transition-transform duration-300 ease-in-out
-        lg:transition-none
-      `}>
-        <div className="p-4 lg:p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 hidden lg:block">Navigation</h2>
+        md:transition-none
+        md:min-h-screen
+      `}
+      >
+        <div className="p-4 md:p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6 hidden md:block">
+            Navigation
+          </h2>
           <nav className="space-y-2">
             {navigation.map((item) => {
               const Icon = item.icon;
