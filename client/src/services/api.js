@@ -73,4 +73,29 @@ export const occupantAPI = {
   getPropertyInfo: () => api.get("/occupant/property"),
 };
 
+// File API
+export const fileAPI = {
+  uploadFile: (formData) => api.post("/files/upload", formData),
+  getPropertyFiles: (propertyId) => api.get(`/files/property/${propertyId}`),
+  getOccupantFiles: (occupantId) => api.get(`/files/occupant/${occupantId}`),
+  deleteFile: (fileId, data) => api.delete(`/files/${fileId}`, { data }),
+  downloadFile: (fileId) => api.get(`/files/download/${fileId}`),
+};
+
+// Communication API
+export const communicationAPI = {
+  sendIndividualCommunication: (formData) =>
+    api.post("/communications/individual", formData),
+  sendBulkCommunication: (formData) =>
+    api.post("/communications/bulk", formData),
+  getPropertyCommunications: (propertyId) =>
+    api.get(`/communications/property/${propertyId}`),
+  getOccupantCommunications: (occupantId) =>
+    api.get(`/communications/occupant/${occupantId}`),
+  markAsRead: (communicationId) =>
+    api.patch(`/communications/${communicationId}/read`),
+  deleteCommunication: (communicationId) =>
+    api.delete(`/communications/${communicationId}`),
+};
+
 export default api;

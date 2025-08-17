@@ -8,6 +8,8 @@ const { testConnection, initDatabase } = require("./models");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const occupantRoutes = require("./routes/occupant");
+const fileRoutes = require("./routes/files");
+const communicationRoutes = require("./routes/communications");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -41,6 +43,8 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/occupant", occupantRoutes);
+app.use("/api/files", fileRoutes);
+app.use("/api/communications", communicationRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

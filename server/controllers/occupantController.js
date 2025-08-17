@@ -1,4 +1,4 @@
-const { Property, Occupant } = require("../models");
+const { Property, Occupant, FileUpload, Communication } = require("../models");
 
 // Get Dashboard
 const getDashboard = async (req, res) => {
@@ -10,9 +10,26 @@ const getDashboard = async (req, res) => {
       attributes: ["property_code", "property_type", "status"],
     });
 
-    // Simple response without documents/notifications (removed feature)
+    // Get file count for this occupant
+    const fileCount = await FileUpload.count({
+      where: {
+        property_id: propertyId,
+        uploaded_by: "occupant",
+        uploaded_by_id: req.user.id,
+      },
+    });
+
+    // Get communication count for this property
+    const communicationCount = await Communication.count({
+      where: {
+        recipient_property_id: propertyId,
+      },
+    });
+
     res.json({
       property,
+      fileCount,
+      communicationCount,
       documents: [],
       notifications: [],
       receiptCount: 0,

@@ -1,18 +1,12 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import OccupantSidebar from "./OccupantSidebar";
+import { Routes, Route } from "react-router-dom";
 import OccupantHeader from "./OccupantHeader";
+import OccupantSidebar from "./OccupantSidebar";
 import DashboardOverview from "./DashboardOverview";
+import FileUploadTab from "./FileUploadTab";
+import CommunicationTab from "./CommunicationTab";
 
 const OccupantDashboard = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  // Debug: Show user info
-  console.log("OccupantDashboard - User:", user);
-  console.log("OccupantDashboard - isFirstLogin:", user?.isFirstLogin);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <OccupantHeader />
@@ -21,6 +15,8 @@ const OccupantDashboard = () => {
         <main className="flex-1 p-6">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
+            <Route path="/files" element={<FileUploadTab />} />
+            <Route path="/communications" element={<CommunicationTab />} />
           </Routes>
         </main>
       </div>

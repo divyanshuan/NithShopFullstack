@@ -27,8 +27,9 @@ const sequelize = new Sequelize(
 // Import models - Fix: Call the functions with sequelize instance
 const Property = require("./Property")(sequelize);
 const Occupant = require("./Occupant")(sequelize);
-
 const AdminUser = require("./AdminUser")(sequelize);
+const FileUpload = require("./FileUpload")(sequelize);
+const Communication = require("./Communication")(sequelize);
 
 // Define associations
 Property.hasMany(Occupant, {
@@ -39,6 +40,28 @@ Property.hasMany(Occupant, {
 Occupant.belongsTo(Property, {
   foreignKey: "property_id",
   as: "property",
+});
+
+// File upload associations
+Property.hasMany(FileUpload, {
+  foreignKey: "property_id",
+  as: "fileUploads",
+  onDelete: "CASCADE",
+});
+FileUpload.belongsTo(Property, {
+  foreignKey: "property_id",
+  as: "property",
+});
+
+// Communication associations
+Property.hasMany(Communication, {
+  foreignKey: "recipient_property_id",
+  as: "communications",
+  onDelete: "CASCADE",
+});
+Communication.belongsTo(Property, {
+  foreignKey: "recipient_property_id",
+  as: "recipientProperty",
 });
 
 // Test database connection
@@ -73,6 +96,7 @@ module.exports = {
   initDatabase,
   Property,
   Occupant,
-
   AdminUser,
+  FileUpload,
+  Communication,
 };

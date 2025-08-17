@@ -18,7 +18,7 @@ const PropertiesList = () => {
   const [pagination, setPagination] = useState({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [addFormData, setAddFormData] = useState({
-    propertyType: type, // Always use the page type (Shop/Booth/Canteen)
+    propertyType: type || "Shop", // Default to Shop if type is undefined
     propertyCode: "",
     occupantName: "",
     occupantEmail: "",
@@ -28,16 +28,20 @@ const PropertiesList = () => {
   const [addingProperty, setAddingProperty] = useState(false);
 
   useEffect(() => {
-    fetchProperties();
+    if (type) {
+      fetchProperties();
+    }
   }, [type, currentPage]);
 
   // Update form data when page type changes
   useEffect(() => {
-    console.log("🔄 Page type changed to:", type);
-    setAddFormData((prev) => ({
-      ...prev,
-      propertyType: type,
-    }));
+    if (type) {
+      console.log("🔄 Page type changed to:", type);
+      setAddFormData((prev) => ({
+        ...prev,
+        propertyType: type,
+      }));
+    }
   }, [type]);
 
   // Check if modal should be opened automatically from dashboard navigation
@@ -50,35 +54,69 @@ const PropertiesList = () => {
     }
   }, [location.state, navigate, location.pathname]);
 
+  // Safety check for type parameter - moved after all hooks
+  if (!type) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">Invalid property type</p>
+      </div>
+    );
+  }
+
   const fetchProperties = async () => {
     try {
       setLoading(true);
+      console.log("🔍 Fetching properties for type:", type);
+
+      if (!type) {
+        console.error("❌ Type parameter is undefined");
+        return;
+      }
+
       const response = await adminAPI.getPropertiesByType(
         type,
         currentPage,
         10
       );
-      setProperties(response.data.properties);
-      setPagination(response.data.pagination);
-      setTotalPages(response.data.pagination.pages);
+
+      console.log("✅ Properties response:", response.data);
+
+      if (response.data && response.data.properties) {
+        setProperties(response.data.properties);
+        setPagination(response.data.pagination || {});
+        setTotalPages(response.data.pagination?.pages || 1);
+      } else {
+        console.warn("⚠️ No properties data in response");
+        setProperties([]);
+        setPagination({});
+        setTotalPages(1);
+      }
     } catch (error) {
-      console.error("Error fetching properties:", error);
+      console.error("❌ Error fetching properties:", error);
       toast.error("Failed to load properties");
+      setProperties([]);
+      setPagination({});
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredProperties = properties.filter(
-    (property) =>
-      property.property_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.occupants?.[0]?.name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      property.occupants?.[0]?.email
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
+  const filteredProperties = properties.filter((property) => {
+    if (!property) return false;
+
+    const propertyCode = property.property_code || "";
+    const occupantName = property.occupants?.[0]?.name || "";
+    const occupantEmail = property.occupants?.[0]?.email || "";
+
+    const searchLower = searchTerm.toLowerCase();
+
+    return (
+      propertyCode.toLowerCase().includes(searchLower) ||
+      occupantName.toLowerCase().includes(searchLower) ||
+      occupantEmail.toLowerCase().includes(searchLower)
+    );
+  });
 
   const getPropertyTypeColor = (propertyType) => {
     switch (propertyType) {
@@ -215,7 +253,7 @@ const PropertiesList = () => {
               {filteredProperties.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="text-center py-8 text-gray-500">
-                    No {type.toLowerCase()}s found
+                    No {type ? type.toLowerCase() : "properties"} found
                   </td>
                 </tr>
               ) : (

@@ -1,30 +1,13 @@
 import React from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import AdminSidebar from "./AdminSidebar";
+import { Routes, Route } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
+import AdminSidebar from "./AdminSidebar";
 import DashboardOverview from "./DashboardOverview";
 import PropertiesList from "./PropertiesList";
 import PropertyDetails from "./PropertyDetails";
-
-import AdminManagement from "./AdminManagement";
+import BulkCommunicationTab from "./BulkCommunicationTab";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Check if user needs to change password
-  React.useEffect(() => {
-    if (user?.isFirstLogin) {
-      navigate("/change-password");
-    }
-  }, [user, navigate]);
-
-  if (user?.isFirstLogin) {
-    return null; // Will redirect to change password
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminHeader />
@@ -34,13 +17,14 @@ const AdminDashboard = () => {
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/properties/:type" element={<PropertiesList />} />
-
             <Route
               path="/properties/:type/:propertyId"
               element={<PropertyDetails />}
             />
-
-            <Route path="/admin-management" element={<AdminManagement />} />
+            <Route
+              path="/bulk-communication"
+              element={<BulkCommunicationTab />}
+            />
           </Routes>
         </main>
       </div>

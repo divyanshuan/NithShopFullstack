@@ -1,16 +1,28 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home } from "lucide-react";
+import { Home, Upload, MessageSquare } from "lucide-react";
 
 const OccupantSidebar = () => {
   const location = useLocation();
 
   const navigation = [
     {
-      name: "Details",
+      name: "Dashboard",
       href: "/occupant",
       icon: Home,
       current: location.pathname === "/occupant",
+    },
+    {
+      name: "File Upload",
+      href: "/occupant/files",
+      icon: Upload,
+      current: location.pathname === "/occupant/files",
+    },
+    {
+      name: "Communications",
+      href: "/occupant/communications",
+      icon: MessageSquare,
+      current: location.pathname === "/occupant/communications",
     },
   ];
 

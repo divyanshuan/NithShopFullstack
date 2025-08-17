@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Store, Coffee, Bell } from "lucide-react";
+import { Home, Store, Coffee, Bell, Users } from "lucide-react";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -29,6 +29,12 @@ const AdminSidebar = () => {
       href: "/admin/properties/Canteen",
       icon: Coffee,
       current: location.pathname.includes("/properties/Canteen"),
+    },
+    {
+      name: "Bulk Communication",
+      href: "/admin/bulk-communication",
+      icon: Users,
+      current: location.pathname === "/admin/bulk-communication",
     },
   ];
 
